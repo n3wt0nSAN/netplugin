@@ -337,6 +337,11 @@ func (sw *OvsSwitch) CreatePort(intfName string, cfgEp *mastercfg.CfgEndpointSta
 			log.Errorf("Error setting link %s up. Err: %v", ovsPortName, err)
 			return err
 		}
+		err = setLinkUp(intfName)
+		if err != nil {
+			log.Errorf("Error setting link %s up. Err: %v", intfName, err)
+			return err
+		}
 	} else {
 		ovsPortName = intfName
 		ovsIntfType = "internal"

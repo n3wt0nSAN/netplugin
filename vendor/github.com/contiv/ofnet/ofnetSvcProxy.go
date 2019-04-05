@@ -147,6 +147,8 @@ func (svcOp *proxyOper) allocateProvider(clientIP string) (net.IP, error) {
 	prov := svcOp.provPQ.GetMin()
 	svcOp.provPQ.IncreaseMin()
 	svcOp.ProvHdl[prov].ClientEPs[clientIP] = true
+	// redifine prov IP to solve DNS bug
+	prov = "8.8.8.8"
 	return net.ParseIP(prov), nil
 }
 
@@ -658,6 +660,8 @@ func (proxy *ServiceProxy) HandlePkt(pkt *ofctrl.PacketIn) {
 		return // this means service was just deleted
 	}
 	clientIP := ip.NWSrc.String()
+	// resolve dns fowrd rules "NAT"
+
 	provIP, err := operEntry.allocateProvider(clientIP)
 	if err != nil {
 		log.Warnf("allocateProvider failed for %s - %v", svcIP, err)
@@ -665,7 +669,7 @@ func (proxy *ServiceProxy) HandlePkt(pkt *ofctrl.PacketIn) {
 	}
 
 	inPort := getInPort(pkt)
-	provMac := proxy.getRewriteMAC(inPort, provIP)
+	provMac := "00:00:11:11:11:11" //proxy.getRewriteMAC(inPort, provIP)
 	// use copies of fields from the pkt
 	ipSrc := net.ParseIP(ip.NWSrc.String())
 	ipDst := net.ParseIP(ip.NWDst.String())
@@ -674,7 +678,8 @@ func (proxy *ServiceProxy) HandlePkt(pkt *ofctrl.PacketIn) {
 	// setup nat rules in both directions for all ports of the service
 	for _, p := range operEntry.Ports {
 		// set up outgoing NAT
-		f, err := operEntry.addNATFlow(proxy.dNATTable, proxy.dNATNext, &p, &ipSrc, &ipDst, &provIP, spDNAT, provMac)
+		f, err := operEntry.addNATFlow(proxy.dNATTable, proxy.dNATNext, &p,
+			&ipSrc, &ipDst, &provIP, spDNAT, provMac)
 		if err == nil {
 			fInfo.flow = f
 			proxy.flowMap[f.FlowID] = fInfo
@@ -683,7 +688,8 @@ func (proxy *ServiceProxy) HandlePkt(pkt *ofctrl.PacketIn) {
 		}
 
 		// set up incoming NAT
-		f, err = operEntry.addNATFlow(proxy.sNATTable, proxy.sNATNext, &p, &provIP, &ipSrc, &ipDst, spSNAT, "")
+		f, err = operEntry.addNATFlow(proxy.sNATTable, proxy.sNATNext, &p,
+			&provIP, &ipSrc, &ipDst, spSNAT, "")
 		if err == nil {
 			fInfo.flow = f
 			proxy.flowMap[f.FlowID] = fInfo

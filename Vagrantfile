@@ -420,8 +420,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             # forward netmaster port
             if n == 0 then
-                node.vm.network "forwarded_port", guest: 9999, host: 9999
-                node.vm.network "forwarded_port", guest: 80, host: 9998
+                node.vm.network "forwarded_port", guest: 8888, host: 8888
+                node.vm.network "forwarded_port", guest: 8080, host: 8887
             end
             fwd_port1 = 8880 + n
             fwd_port2 = 9990 + n

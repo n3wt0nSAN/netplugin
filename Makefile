@@ -392,3 +392,9 @@ tar:
 # GITHUB_USER and GITHUB_TOKEN are needed be set (used by github-release)
 release: tar
 	TAR_FILENAME=$(TAR_FILENAME) TAR_FILE=$(TAR_FILE) scripts/release.sh
+
+# Form to create a image docker by n3wt0nSAN
+release-image: compile-with-docker binaries-from-container archive
+	$(TAR) xvf $(TAR_FILE) -C ./netplugin-image/bin
+	docker build ./netplugin-image/ -t netplugin -t sw4iot/netplugin:test
+	docker push sw4iot/netplugin:test

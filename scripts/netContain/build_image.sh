@@ -2,8 +2,9 @@
 
 set -euo pipefail
 
-REPOSITORY="contivbase"
+REPOSITORY="newton001/netplugin"
 NETPLUGIN_BINARIES="netplugin netmaster netctl contivk8s"
+NETPLUGIN_CONTAINER_TAG="test"
 IMAGE=$REPOSITORY:${NETPLUGIN_CONTAINER_TAG}
 
 function get_image_id() {

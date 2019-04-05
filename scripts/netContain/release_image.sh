@@ -59,13 +59,18 @@ cd -P -- "$(dirname -- "$0")"
 # empty this directory or tar will fail to extract
 rm -rf bin && mkdir bin
 
-curl -L -o $filename https://github.com/contiv/netplugin/releases/download/$contiv_version/$filename
+#curl -L -o $filename https://github.com/contiv/netplugin/releases/download/$contiv_version/$filename
 tar xvfj $filename -C bin
 
 # remove the contrib directory, we don't need it in the image
 rm -rf bin/contrib
 
 docker build . -t $image -t ${image_name}:latest
+echo "NEED push the image?"
+read y
+## create a option to make login
+if [y == "yes"] 
+
 docker push $image
 
 echo ""

@@ -29,6 +29,12 @@ const EPAddURL = "/ContivCNI.AddPod"
 // EPDelURL is the rest point for deleting an endpoint
 const EPDelURL = "/ContivCNI.DelPod"
 
+// EPAddURL is the rest point for adding an endpoint type device IoT
+const EPIoTAddURL = "/ContivIOT.AddIotDev"
+
+// EPDelURL is the rest point for deleting an endpoint
+const EPIoTDelURL = "/ContivIOT.DelIotDev"
+
 // CNIPodAttr holds attributes of the pod to be attached or detached
 type CNIPodAttr struct {
 	Name             string `json:"K8S_POD_NAME,omitempty"`
@@ -38,12 +44,29 @@ type CNIPodAttr struct {
 	IntfName         string `json:"CNI_IFNAME,omitempty"`
 }
 
+// IOTDevAttr holds attributes of the pod to be attached or detached
+type IOTDevAttr struct {
+	Name          string `json:"IOT_DEV_NAME,omitempty"`
+	Tenant        string `json:"IOT_DEV_TENANT,omitempty"`
+	InfraIotDevID string `json:"IOT_DEV_INFRA_ID,omitempty"`
+	Network       string `json:"IOT_DEV_NETWORK,omitempty"`
+	Group         string `json:"IOT_DEV_GROUP,omitempty"`
+}
+
 // RspAddPod contains the response to the AddPod
 type RspAddPod struct {
-	Result      uint   `json:"result,omitempty"`
-	EndpointID  string `json:"endpointid,omitempty"`
+	Result     uint   `json:"result,omitempty"`
+	EndpointID string `json:"endpointid,omitempty"`
+	ErrMsg     string `json:"errmsg,omitempty"`
+	ErrInfo    string `json:"errinfo,omitempty"`
+	Attr       *Attr  `json:"epattr,omitempty"`
+}
+
+type Attr struct {
 	IPAddress   string `json:"ipaddress,omitempty"`
+	PortName    string `json:"portname,omitempty"`
+	MacAddress  string `json:"macaddress,omitempty"`
+	Gateway     string `json:"gateway,omitempty"`
 	IPv6Address string `json:"ipv6address,omitempty"`
-	ErrMsg      string `json:"errmsg,omitempty"`
-	ErrInfo     string `json:"errinfo,omitempty"`
+	IPv6Gateway string `json:"ipv6gateway,omitempty"`
 }

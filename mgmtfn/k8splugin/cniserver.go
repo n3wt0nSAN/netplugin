@@ -22,6 +22,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/contiv/netplugin/mgmtfn/k8splugin/cniapi"
+
 	"github.com/contiv/netplugin/netplugin/plugin"
 	"github.com/contiv/netplugin/utils"
 	"github.com/contiv/netplugin/utils/k8sutils"
@@ -133,7 +134,11 @@ func InitCNIServer(netplugin *plugin.NetPlugin) error {
 	t := router.Headers("Content-Type", "application/json").Methods("POST").Subrouter()
 	t.HandleFunc(cniapi.EPAddURL, utils.MakeHTTPHandler(addPod))
 	t.HandleFunc(cniapi.EPDelURL, utils.MakeHTTPHandler(deletePod))
+	t.HandleFunc(cniapi.EPIoTAddURL, utils.MakeHTTPHandler(addIotDev))
+	t.HandleFunc(cniapi.EPIoTDelURL, utils.MakeHTTPHandler(deleteIotDev))
 	t.HandleFunc("/ContivCNI.{*}", utils.UnknownAction)
+	// register handlers for devices iot on contiv infra
+	t.HandleFunc("/ContivIOT.{*}", utils.UnknownAction)
 
 	driverPath := cniapi.ContivCniSocket
 	os.Remove(driverPath)

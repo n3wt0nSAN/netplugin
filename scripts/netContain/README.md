@@ -5,8 +5,10 @@ deploy it in docker or kubernetes modes.
 The script build_image.sh should be executed from the top level
 directory as follows:
 
-```
-./scripts/netContain/build_image.sh
+```shell
+cp netplugin-<version>.tar.bz2 scripts/netContain/.
+./scripts/netContain/release_image.sh -v <version>
+./scripts/netContain/release_image.sh -h # for more
 ```
 
 After this script successfully executes you will get a final image. The

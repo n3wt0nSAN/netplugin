@@ -210,7 +210,8 @@ func createPortVlanFlow(agent *OfnetAgent, vlanTable, nextTable *ofctrl.Table, e
 }
 
 // createDscpFlow creates DSCP v4/v6 flows
-func createDscpFlow(agent *OfnetAgent, vlanTable, nextTable *ofctrl.Table, endpoint *OfnetEndpoint) (*ofctrl.Flow, *ofctrl.Flow, error) {
+func createDscpFlow(agent *OfnetAgent, vlanTable, nextTable *ofctrl.Table,
+	endpoint *OfnetEndpoint) (*ofctrl.Flow, *ofctrl.Flow, error) {
 	// if endpoint has no DSCP value, we are done..
 	if endpoint.Dscp == 0 {
 		return nil, nil, nil

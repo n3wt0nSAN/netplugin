@@ -27,7 +27,7 @@ RUN VERSION_SUFFIX="$(if git diff-index --quiet HEAD --; then echo '-unsupported
 FROM ubuntu:16.04
 
 RUN apt-get update \
- && apt-get install -y openvswitch-switch=2.5.2* \
+ && apt-get install -y openvswitch-switch=2.5.5* \
         net-tools \
         iptables \
  && rm -rf /var/lib/apt/lists/*
